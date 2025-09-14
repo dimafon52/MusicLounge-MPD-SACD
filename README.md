@@ -51,6 +51,7 @@
 * Remote control support with any bluetooth remote control.
 
 ### Buy Me a Coffee
+***
 [![Buy Me a Coffee](assets/coffee-btn4.png)](https://www.buymeacoffee.com/dimafon)
 ##### PayPal
 <!-- [![PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/username) -->
