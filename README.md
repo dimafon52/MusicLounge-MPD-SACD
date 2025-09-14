@@ -1,7 +1,6 @@
 
 <!-- # MucicLounge (under development at the moment) -->
 # MucicLounge
-***
 * MusicLounge is a music player daemon based on [MPD-SACD](https://sourceforge.net/projects/mpd.sacddecoder.p), playing various music formats, including sacd ISO images.  
   Added the following services: [MPD-based UPnP Audio Media Renderer](https://www.lesbonscomptes.com/upmpdcli/), MPD web-based client [myMPD](https://github.com/jcorporation/mympd), [Samba](https://www.samba.org) server,   
   [ReadyMedia](https://sourceforge.net/projects/minidlna) (previously MiniDLNA) and MCIS web server (music content image show.).
@@ -10,7 +9,6 @@
 [![Watch the video](assets/Screenshot.jpg)](https://youtu.be/OFBMrEFkA4M)
 
 ## MusicLounge
-***
 * Default dirs structure:
         
         /mnt
@@ -29,7 +27,6 @@
     * To work with files, connect to the Samba share with a file manager such as Nemo, Thunar, etc. at smb://192.168.0.123/music.
 
 ## Minimum requirements
-***
 * Hardware:  
     * CPU: Intel(R) Celeron(R) N4020 CPU @ 1.10GHz  
     * RAM: 2G  
@@ -38,7 +35,6 @@
     * archlinux without GUI ([archlinux](https://archlinux.org/download/#download-mirrors), [archlinux](https://ftp.belnet.be/arcolinux/arcoinstall/index.html) from [arcolinux](https://arcolinux.com/))
 
 ## Supported OS
-***
 * Arch Linux (verified)
 * Ubuntu
 * Debian
@@ -46,18 +42,15 @@
 * Alpine Linux
 
 ## Installation
-***
 * Run musiclounge_install.sh for interactive installation.
 
 ## ToDo
-***
 * Automatization:  
     * Convert All SACD ISO Albums to DSF tracks.
 * Update services, each separately(requires additional service server creation).
 * Remote control support with any bluetooth remote control.
 
 ### Buy Me a Coffee
-***
 [![Buy Me a Coffee](assets/coffee-btn4.png)](https://www.buymeacoffee.com/dimafon)
 ##### PayPal
 <!-- [![PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/username) -->
