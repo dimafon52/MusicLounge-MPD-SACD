@@ -1,0 +1,103 @@
+
+# 13.06.25
+
+services:
+  # Music Player Daemon
+  mpd:
+    build:
+      mpd/
+    # privileged: true
+    network_mode: "host"
+    # ports:
+    #   - 6600:6600  # MPD Client
+    #   - 8000:8000  # Stream
+    devices:
+      - /dev/snd
+    volumes:
+      - /mnt/music/:/var/lib/mpd/music:ro
+      - ./mpd/playlists/:/var/lib/mpd/playlists
+      # - mpd_data:/var/lib/mpd/data
+      - mpd_share:/var/local/mpd_share
+      - ./mpd/mpd_data:/var/lib/mpd/data
+    environment:
+      MPD_SHARE_DIR: /var/local/mpd_share
+      PYTHONUNBUFFERED: 1
+    restart: always        
+
+  # Bluetooth remote control
+  remote_ctrl:
+    build: remote_control/
+    privileged: true
+    network_mode: "host"
+    pid: "host"
+    # devices:
+    #     - /dev/input:/dev/input
+    volumes:
+      - /proc/:/proc:ro
+      - /dev/:/dev:ro
+      - mpd_share:/var/local/mpd_share
+    environment:
+      MPD_SHARE_DIR: /var/local/mpd_share
+      MPD_FIFO_CTRL: /var/local/mpd_share/remote_ctrl.fifo
+      MPD_IP_ADDR: localhost
+      PYTHONUNBUFFERED: 1
+    restart: always
+    
+  # MPD web client myMPD
+  mympd:
+    build: mympd/
+    image: dimafon/mympd
+    network_mode: "host"
+    # ports:
+    #    - 8080:80
+    #    - 8043:443
+    volumes:     ## '___' prefix - see tips/.gitignore file
+      - ./mympd/var_lib_mympd:/var/lib/mympd
+      - mpd_share:/var/local/mpd_share
+    environment:
+      MPD_IP_ADDR: localhost
+      MPD_SHARE_DIR: /var/local/mpd_share
+      MPD_FIFO_CTRL: /var/local/mpd_share/remote_ctrl.fifo
+      PYTHONUNBUFFERED: 1
+    restart: always
+
+  # UPnP render
+  upmpdcli:
+    build: upmpdcli/
+    network_mode: "host"
+    environment:
+      # MPD_IP_ADDR: mpd
+      MPD_IP_ADDR: localhost
+      PYTHONUNBUFFERED: 1
+    restart: always
+    
+  # Get art cover of albums (no must have, for MAFA android client) 
+  mpd_cover_art_web_server: 
+    image: python:alpine
+    ports:
+      - 6680:6680  # Album Art
+    environment:
+      PYTHONUNBUFFERED: 1
+    restart: always
+    volumes:
+      - /mnt/music:/music:ro
+    command: sh -c "python -m http.server -d /music 6680"
+
+  # Show pictures of current artist, album  
+  picture_show_server:
+    build:
+      picture_show_server/
+    network_mode: "host"
+    # ports:
+    #   - "5000:5000" 
+    # volumes:
+    #   - /tmp:/tmp
+    environment:
+      # MPD_IP_ADDR: 192.168.0.110
+      MPD_IP_ADDR: localhost
+      # MPD_IP_ADDR: mpd
+      PYTHONUNBUFFERED: 1
+    restart: always
+
+volumes:
+   mpd_share:

@@ -1,0 +1,7 @@
+
+myMPD - web clent for mpd
+
+To update mympd:
+cd mpd
+docker rm mpd-mympd
+docker compose up --build mympd

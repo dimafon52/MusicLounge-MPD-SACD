@@ -1,0 +1,146 @@
+# 13.06.25
+
+services:
+  # Music Player Daemon
+  mpd:
+    build:
+      mpd/
+    # privileged: true
+    network_mode: "host"
+    # ports:
+    #   - 6600:6600  # MPD Client
+    #   - 8000:8000  # Stream
+    devices:
+      - /dev/snd
+    volumes:
+      - ./mpd/etc/mpd.conf:/etc/mpd.conf
+      # Please SET your location of music directory(default: /mnt/music):
+      # Read 
+      # - /mnt/music/:/var/lib/mpd/music:ro 
+      - $MUSICLOUNGE_ROOT:/var/lib/mpd/music:ro 
+      - ./mpd/playlists/:/var/lib/mpd/playlists
+      - ./mpd/mpd_data:/var/lib/mpd/data
+      # - mpd_data:/var/lib/mpd/data
+      - mpd_share:/var/local/mpd_share
+    environment:
+      MPD_SHARE_DIR: /var/local/mpd_share
+      PYTHONUNBUFFERED: 1
+    # https://medium.com/nuances-of-programming/%D0%BA%D0%B0%D0%BA-%D1%83%D1%81%D0%BF%D0%B5%D1%88%D0%BD%D0%BE-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D1%83-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%B9%D0%BD%D0%B5%D1%80%D0%B0-%D0%B2-docker-compose-6e3b449018b7  
+    healthcheck:
+      test: mpc status || exit 1
+      interval: 2s
+      timeout: 2s
+      retries: 3
+    restart: always        
+    
+  # UPnP render
+  upmpdcli:
+    build: upmpdcli/
+    network_mode: "host"
+    volumes:
+      - ./upmpdcli/etc/upmpdcli.conf:/etc/upmpdcli.conf
+    environment:
+      # MPD_IP_ADDR: mpd
+      MPD_IP_ADDR: localhost
+      PYTHONUNBUFFERED: 1
+    depends_on: # Waiting for mpd service after successful execution of 'mpc status' command
+      mpd:
+        condition: service_healthy
+    restart: always
+  
+  mympd:
+    build: mympd/
+    # image: dimafon/mympd
+    network_mode: "host"
+    volumes:
+      - ./mympd/var_lib_mympd:/var/lib/mympd
+      - ./mympd/var_cache_mympd:/var/cache/mympd
+      - mpd_share:/var/local/mpd_share
+    # user:  
+    environment:
+      # https://jcorporation.github.io/myMPD/020-configuration/configuration-files/
+      # UMASK_SET: 066
+      MYMPD_HTTP_PORT: 80
+      MYMPD_SSL: false
+      MPD_IP_ADDR: localhost
+      MPD_SHARE_DIR: /var/local/mpd_share
+      MPD_FIFO_CTRL: /var/local/mpd_share/remote_ctrl.fifo
+      PYTHONUNBUFFERED: 1
+    depends_on: # Waiting for mpd service after successful execution of 'mpc status' command
+      mpd:
+        condition: service_healthy
+    restart: always
+
+  torproxy:
+    image: dperson/torproxy
+    container_name: torproxy
+    network_mode: "host"
+    # ports:
+    #   - "9050:9050"  # SOCKS
+    #   - "9051:9051"  # ControlPort
+    command: >
+      -p "torpassword"
+      -s "9050;0.0.0.0:9050"
+    restart: always
+
+  # Show pictures of current artist, album  
+  picture_show_server:
+    build:
+      picture_show_server/
+    network_mode: "host"
+    # ports:
+    #   - "5000:5000" 
+    environment:
+      # MPD_IP_ADDR: 192.168.0.110
+      MPD_IP_ADDR: localhost
+      # MPD_IP_ADDR: mpd
+      PYTHONUNBUFFERED: 1
+    depends_on: # Waiting for mpd service after successful execution of 'mpc status' command
+      mpd:
+        condition: service_healthy
+      torproxy:
+        condition: service_started  
+    restart: always
+
+  minidlna:
+    build:
+      minidlna/
+    network_mode: "host"
+    volumes:
+      - ./minidlna/etc/minidlna.conf:/etc/minidlna.conf
+      - $MUSICLOUNGE_ROOT:/var/lib/minidlna/music:ro
+      - ./minidlna/var_cache:/var/cache/minidlna
+
+  samba_srv:
+    build:
+        samba_srv/
+    network_mode: "host"
+    volumes:
+      - ./samba_srv/etc/samba/smb.conf:/etc/samba/smb.conf
+      - $MUSICLOUNGE_ROOT:/var/lib/samba/music
+  
+volumes:
+  mpd_share:
+  
+
+
+  # MPD web client myMPD
+  # mympd:
+  #   image: ghcr.io/jcorporation/mympd/mympd
+  #   container_name: mympd
+  #   ports:
+  #     - 8080:8080
+  #   user: 1000:1000
+  #   environment:
+  #     - UMASK_SET=022
+  #     - MYMPD_SSL=false
+  #     - MYMPD_HTTP_PORT=8080
+  #   volumes:
+  #     - /run/mpd:/run/mpd
+  #     ## Optional for myGPIOd support
+  #     ## - /run/mygpiod:/run/mygpiod
+  #     - /docker/mympd/workdir:/var/lib/mympd
+  #     - /docker/mympd/cachedir:/var/cache/mympd
+  #     - /var/lib/mpd/music:/var/lib/mpd/music:ro
+  #     - /var/lib/mpd/playlists:/var/lib/mpd/playlists:ro
+  #   restart: unless-stopped

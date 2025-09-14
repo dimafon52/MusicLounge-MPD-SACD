@@ -1,0 +1,7 @@
+{"type":"icon","name":"myMPD","ligature":"preview","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"appGoto","options":["Browse","Database","AlbumList","0","100","any","{\"tag\":\"Last-Modified\",\"desc\":false}","Album",""]}
+{"type":"icon","name":"StartJukeBox","ligature":"code","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"execScriptFromOptions","options":["StartJukeBox",""]}
+{"type":"icon","name":"PlayAlbum","ligature":"code","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"execScriptFromOptions","options":["PlayAlbum",""]}
+{"type":"icon","name":"PlayLikeSongs","ligature":"code","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"execScriptFromOptions","options":["PlayLikeSongs",""]}
+{"type":"icon","name":"Radiobrowser","ligature":"code","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"execScriptFromOptions","options":["Radiobrowser","Name,Country,Tag"]}
+{"type":"icon","name":"Webradio favorites","ligature":"preview","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"appGoto","options":["Browse","Radio","Favorites","0","100","any","{\"tag\":\"Name\",\"desc\":false}","",""]}
+{"type":"icon","name":"Show Images","ligature":"link","bgcolor":"#28a745","color":"#f8f9fa","image":"","cmd":"openExternalLink","options":["localhost:5000","true"]}

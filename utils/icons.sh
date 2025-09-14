@@ -1,0 +1,17 @@
+
+#
+# 📂 👉 ⚠️ ✅ ❌ 🔵 🟢 🟡 📦 👤 ➡️  🧪 📡 🌹 ✴️ 😊 😎 🔊 🎛️ ☕ ⚖️
+# 🖧 - server
+ICON_BASH_ERROR=❌
+ICON_BASH_NOTE=👉
+ICON_BASH_WARN=⚠️
+ICON_BASH_TODO=➡️
+ICON_BASH_DONE=✅
+ICON_BASH_PKG=📦
+ICON_BASH_INSTALL=📦
+ICON_BASH_FOLDER=📂
+ICON_BASH_SMILE=😊
+ICON_BASH_BLUE=🔵
+ICON_BASH_SPEAKER=🔊
+ICON_BASH_MIXER=🎛️
+

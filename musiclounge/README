@@ -1,0 +1,5 @@
+
+Make dirs:
+sudo  mkdir -p /mnt/music/local_music /mnt/music/remote_music
+Add mount command to /etc/fstab
+//192.168.0.1/media/MyPassport/MusicLib  /mnt/music  cifs  credentials=/etc/smb-credentials,uid=1000,gid=1000,iocharset=utf8,vers=3.0,nofail,x-systemd.automount  0  0
