@@ -24,6 +24,16 @@ RETURN_VALUE=""
 DEFAULT_IFACE=$(ip -o -4 route show to default)
 # [musiclounge]$ echo $DEFAULT_IFACE 
 # default via 192.168.0.1 dev enp0s3 proto dhcp src 192.168.0.107 metric 100
+mpd_db_update(){
+    sp="/-\|"
+    i=0
+    echo -n "   $ICON_BASH_NOTE Please wait... "
+    while mpc status | grep -q "Updating DB"; do
+         printf "\b${sp:i++%${#sp}:1}"
+        sleep 0.5
+    done
+    echo
+}
 
 #### Font COLOR and STYLE
 color_table() {

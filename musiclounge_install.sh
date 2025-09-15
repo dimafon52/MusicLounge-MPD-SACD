@@ -251,9 +251,9 @@ musiclounge_docker_install(){
     cd ${PWD}/musiclounge
     mkdir -p ./mympd/var_lib_mympd
     mkdir -p ./mympd/var_cache_mympd
-    cp -rf ./mympd/mympd_config/* ./mympd/var_lib_mympd
+    sudo cp -rf ./mympd/mympd_config/* ./mympd/var_lib_mympd
     file=./mympd/var_lib_mympd/state/home_list
-    sed -i._backup_ "/\"name\":\"Show Images\"/s|localhost|http://$host_ip|" "$file"
+    sudo sed -i._backup_ "/\"name\":\"Show Images\"/s|localhost|http://$host_ip|" "$file"
     docker compose up -d
 }
 
@@ -272,9 +272,6 @@ musiclounge_uninstall(){
         $(utils_dialog_continue)
         sudo reboot
     fi
-
-    
-    
     ### Docker
     echo " 1. Stop and remove containers"
     # docker compose -f musiclounge/docker-compose.yml stop #> /dev/null 2>&1
@@ -326,8 +323,11 @@ musiclounge_install() {
         return 1
     fi
     musiclounge_docker_install
-    mpc update
-    sleep 2
+    mpc update >/dev/null 
+    echo " $ICON_BASH_NOTE MPD database update... $ICON_BASH_COFEE"
+    mpd_db_update
+    echo " $ICON_BASH_DONE The database has been updated successfully! $ICON_BASH_SMILE"
+    
     host_ip=$(utils_net ip)
     echo "${FONT_BOLD_YELLOW}"
     echo " $ICON_BASH_DONE The Music Lounge structure has been created successfully! $ICON_BASH_SMILE ${FONT_RESET}"
