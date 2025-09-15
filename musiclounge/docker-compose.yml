@@ -110,7 +110,8 @@ services:
       - ./minidlna/etc/minidlna.conf:/etc/minidlna.conf
       - $MUSICLOUNGE_ROOT:/var/lib/minidlna/music:ro
       - ./minidlna/var_cache:/var/cache/minidlna
-
+    restart: always
+    
   samba_srv:
     build:
         samba_srv/
@@ -118,7 +119,8 @@ services:
     volumes:
       - ./samba_srv/etc/samba/smb.conf:/etc/samba/smb.conf
       - $MUSICLOUNGE_ROOT:/var/lib/samba/music
-  
+    restart: always
+    
 volumes:
   mpd_share:
   

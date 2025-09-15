@@ -254,6 +254,7 @@ musiclounge_docker_install(){
     sudo cp -rf ./mympd/mympd_config/* ./mympd/var_lib_mympd
     file=./mympd/var_lib_mympd/state/home_list
     sudo sed -i._backup_ "/\"name\":\"Show Images\"/s|localhost|http://$host_ip|" "$file"
+    docker compose build
     docker compose up -d
 }
 
